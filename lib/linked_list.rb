@@ -28,14 +28,23 @@ class LinkedList
     @back.next = node if @back
     @back = node
     @front = node unless @front
-    nil
+    node
   end
+  alias push push_back
 
   def push_front(data)
     node = LinkedListNode.new(data, nil, @front)
     @front.prev = node if @front
     @front = node
     @back = node unless @back
+    node
+  end
+
+  def delete_node(node)
+    @front = node.next if node == @front
+    @back = node.prev if node == @back
+    node.prev.next = node.next if node.prev
+    node.next.prev = node.prev if node.next
     nil
   end
 end
