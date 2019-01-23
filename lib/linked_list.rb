@@ -1,7 +1,7 @@
 class LinkedList
-  class Node
+  class LinkedListNode
     attr_accessor :data, :prev, :next
-    def init(data, prev = nil, nxt = nil)
+    def initialize(data, prev = nil, nxt = nil)
       @data = data
       @prev = prev
       @next = nxt
@@ -10,7 +10,7 @@ class LinkedList
 
   include Enumerable
 
-  def init
+  def initialize
     @front = nil
     @back = nil
   end
@@ -24,7 +24,7 @@ class LinkedList
   end
 
   def push_back(data)
-    node = Node.new(data, @back, nil)
+    node = LinkedListNode.new(data, @back, nil)
     @back.next = node if @back
     @back = node
     @front = node unless @front
@@ -32,7 +32,7 @@ class LinkedList
   end
 
   def push_front(data)
-    node = Node.new(data, nil, @front)
+    node = LinkedListNode.new(data, nil, @front)
     @front.prev = node if @front
     @front = node
     @back = node unless @back

@@ -1,2 +1,0 @@
-describe LinkedList do
-end
