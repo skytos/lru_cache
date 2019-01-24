@@ -10,6 +10,7 @@ class LinkedList
 
   include Enumerable
 
+  attr_reader :front, :back
   def initialize
     @front = nil
     @back = nil
@@ -46,5 +47,15 @@ class LinkedList
     node.prev.next = node.next if node.prev
     node.next.prev = node.prev if node.next
     nil
+  end
+
+  def delete_front
+    raise IndexError.new('The list is empty') unless @front
+    delete_node(@front)
+  end
+
+  def move_back(node)
+    delete_node(node)
+    push_back(node.data)
   end
 end
