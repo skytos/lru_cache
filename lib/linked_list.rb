@@ -41,6 +41,7 @@ class LinkedList
     node
   end
 
+  # should probably save and check the list that node belongs to
   def delete_node(node)
     @front = node.next if node == @front
     @back = node.prev if node == @back
@@ -54,6 +55,7 @@ class LinkedList
     delete_node(@front)
   end
 
+  # should probably save and check the list that node belongs to
   def move_back(node)
     delete_node(node)
     push_back(node.data)
