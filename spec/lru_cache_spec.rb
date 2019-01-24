@@ -11,9 +11,6 @@ describe LRUCache do
       expect(cache.size).to eq(0)
       expect(cache.max_size).to eq(max_size)
     end
-
-    it "can be #get'ed from" do
-    end
   end
 
   describe "#set(key, val)" do
@@ -24,8 +21,24 @@ describe LRUCache do
         expect(cache.get(key)).to eq(val)
       end
 
-      it "increases the size" do
-        expect{cache.set(key, val)}.to change{cache.size}.from(0).to(1)
+      context "there are less than max_size keys already in the cache" do
+        it "increases the size" do
+          expect{cache.set(key, val)}.to change{cache.size}.from(0).to(1)
+        end
+      end
+
+      context "there are max_size keys already in the cache" do
+        before do
+          max_size.times{|i| cache.set(i, i) }
+        end
+
+        it "does not change the size" do
+          expect{cache.set(key, val)}.not_to change{cache.size}.from(max_size)
+        end
+
+        it "removes the oldest key" do
+          expect{cache.set(key, val)}.to change{cache.keys}.from([0, 1, 2]).to([1,2,'foo'])
+        end
       end
 
       it "adds the key to the back of #keys" do
@@ -64,6 +77,10 @@ describe LRUCache do
       it "does not affect #keys" do
         expect{cache.get(key)}.not_to change{cache.keys}.from([])
       end
+
+      it "does not change #size" do
+        expect{cache.get(key)}.not_to change{cache.size}.from(0)
+      end
     end
 
     context "key is in the cache" do
@@ -77,6 +94,10 @@ describe LRUCache do
         cache.set("otherkey", "otherval")
         expect{cache.get(key)}.to change{cache.keys}.from([key, 'otherkey']).to(['otherkey', key])
       end
+
+      it "does not change #size" do
+        expect{cache.get(key)}.not_to change{cache.size}.from(1)
+      end
     end
   end
 
@@ -85,7 +106,9 @@ describe LRUCache do
       cache.set('a', 1)
       cache.set('b', 2)
       cache.set('c', 3)
-      expect(cache.keys).to eq(['a', 'b', 'c'])
+      cache.get('b')
+      cache.set('a', 4)
+      expect(cache.keys).to eq(['c', 'b', 'a'])
     end
   end
 end

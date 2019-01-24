@@ -12,6 +12,13 @@ class LRUCache
 
   def set(key, val)
     @size += 1 unless @cache.has_key?(key)
+    if @size > @max_size
+      oldest_key = @keys.first
+      @nodes.delete(oldest_key)
+      @cache.delete(oldest_key)
+      @keys.delete_front
+      @size -= 1
+    end
     update(key)
     @cache[key] = val
   end
